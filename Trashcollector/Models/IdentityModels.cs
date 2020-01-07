@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -29,5 +30,11 @@ namespace Trashcollector.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Trashcollector.Models.Customer> Customers { get; set; }
+
+
+        public System.Data.Entity.DbSet<Trashcollector.Models.Employee> Employees { get; set; }
+        
     }
 }
