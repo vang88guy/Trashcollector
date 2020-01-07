@@ -172,12 +172,14 @@
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001071427264_first.cs" />
-    <Compile Include="Migrations\202001071427264_first.Designer.cs">
-      <DependentUpon>202001071427264_first.cs</DependentUpon>
+    <Compile Include="Migrations\202001072016311_First.cs" />
+    <Compile Include="Migrations\202001072016311_First.Designer.cs">
+      <DependentUpon>202001072016311_First.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -254,6 +256,8 @@
     <Content Include="Views\Employees\Details.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Role\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -272,8 +276,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001071427264_first.resx">
-      <DependentUpon>202001071427264_first.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001072016311_First.resx">
+      <DependentUpon>202001072016311_First.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

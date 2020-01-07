@@ -9,6 +9,8 @@ namespace Trashcollector.Models
 {
     public class Customer
     {
+        
+        
         [Key]
         public int Id { get; set; }
         [ForeignKey("ApplicationUser")]
@@ -29,14 +31,14 @@ namespace Trashcollector.Models
         [Display(Name = "Pick Up Day")]
         public string PickUpDay { get; set; }
         [Display(Name = "Extra Pick Up Date")]
-        public string ExtraPickUpDate { get; set; }
-        [Display(Name = "Balance")]
-        public double Balance { get; set; }
+        public string ExtraPickUpDate { get; set; }       
         [Display(Name ="Suspend Date Start")]
-        public DateTime SuspendStart { get; set; }
+        public string SuspendStart { get; set; }
         [Display(Name = "Suspend Date End")]
-        public DateTime SuspendEnd { get; set; }
+        public string SuspendEnd { get; set; }
         [Display(Name = "Pick Up Confirmation")]
         public bool PickupConfirmation { get; set; }
+        [Display(Name = "Balance")]
+        public double Balance { get; set; }
     }
 }

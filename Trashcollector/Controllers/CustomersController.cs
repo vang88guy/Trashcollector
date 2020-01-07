@@ -40,8 +40,8 @@ namespace Trashcollector.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-           // ViewBag.ApplicationId = new SelectList(, "Id", "Email");
-            return View();
+            Customer customer = new Customer();
+            return View(customer);
         }
 
         // POST: Customers/Create
@@ -49,17 +49,20 @@ namespace Trashcollector.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ApplicationId,FirstName,LastName,StreetAddress,City,State,ZipCode,PickUpDay,ExtraPickUpDate,Balance,SuspendStart,SuspendEnd,PickupConfirmation")] Customer customer)
+        public ActionResult Create(Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
+                customer.ApplicationId = User.Identity.GetUserId();
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Customer");
             }
-
-            //ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", customer.ApplicationId);
-            return View(customer);
+            catch
+            {
+                //ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", customer.ApplicationId);
+                return View(customer);
+            }
         }
 
         // GET: Customers/Edit/5
