@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Trashcollector.Models;
@@ -13,28 +10,24 @@ namespace Trashcollector.Controllers
 {
     public class CustomersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
+        ApplicationDbContext db;
+        public CustomersController()
+        {
+            db = new ApplicationDbContext();
+        }
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = db.Customers.Include(c => c.ApplicationUser);
-            return View(customers.ToList());
+            var customers = db.Customers.ToList();
+            return View(customers);
         }
 
         // GET: Customers/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            
+            return View();
         }
 
         // GET: Customers/Create
@@ -45,14 +38,12 @@ namespace Trashcollector.Controllers
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Create(Customer customer)
         {
             try
             {
+                // TODO: Add insert logic here
                 customer.ApplicationId = User.Identity.GetUserId();
                 db.Customers.Add(customer);
                 db.SaveChanges();
@@ -60,78 +51,58 @@ namespace Trashcollector.Controllers
             }
             catch
             {
-                //ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", customer.ApplicationId);
-                return View(customer);
+                return View();
             }
         }
 
         // GET: Customers/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            var thing = User.Identity.GetUserId();
-           // ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", customer.ApplicationId);
-            return View(customer);
+            return View();
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ApplicationId,FirstName,LastName,StreetAddress,City,State,ZipCode,PickUpDay,ExtraPickUpDate,Balance,SuspendStart,SuspendEnd,PickupConfirmation")] Customer customer)
+        public ActionResult Edit(int id, Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
+                // TODO: Add update logic here
+
                 return RedirectToAction("Index");
             }
-            //ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", customer.ApplicationId);
-            return View(customer);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Customers/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
+            var customer = db.Customers.SingleOrDefault(c => c.Id == id);
             return View(customer);
         }
 
         // POST: Customers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id, Customer customer)
         {
-            Customer customer = db.Customers.Find(id);
-            db.Customers.Remove(customer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                // TODO: Add delete logic here
+                customer = db.Customers.SingleOrDefault(c => c.Id == id);
+                var userdelete = db.Users.SingleOrDefault(c => c.Id == customer.ApplicationId);
+                customer.ApplicationId = null;
+                db.Customers.Remove(customer);
+                db.Users.Remove(userdelete);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            base.Dispose(disposing);
+            catch
+            {
+                return View();
+            }
         }
     }
 }

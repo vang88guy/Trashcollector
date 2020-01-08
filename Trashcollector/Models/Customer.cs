@@ -12,10 +12,7 @@ namespace Trashcollector.Models
         
         
         [Key]
-        public int Id { get; set; }
-        [ForeignKey("ApplicationUser")]
-        public string ApplicationId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public int Id { get; set; }       
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
@@ -40,5 +37,9 @@ namespace Trashcollector.Models
         public bool PickupConfirmation { get; set; }
         [Display(Name = "Balance")]
         public double Balance { get; set; }
+        [ForeignKey("ApplicationUser")]
+        public string ApplicationId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        
     }
 }

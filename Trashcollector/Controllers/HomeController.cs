@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Trashcollector.Models;
 
 namespace Trashcollector.Controllers
 {
@@ -10,6 +11,7 @@ namespace Trashcollector.Controllers
     {
         public ActionResult Index()
         {
+            
             return View();
         }
 
