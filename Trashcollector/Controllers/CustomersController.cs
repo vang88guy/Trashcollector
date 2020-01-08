@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
 using Trashcollector.Models;
 
@@ -18,16 +19,15 @@ namespace Trashcollector.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = db.Customers.ToList();
+            var customers = db.Customers.Include(c => c.ApplicationUser).ToList();
             return View(customers);
         }
 
         // GET: Customers/Details/5
         public ActionResult Details(int id)
         {
-            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
-            
-            return View();
+            var customer = db.Customers.Include(c=>c.ApplicationUser).SingleOrDefault(c => c.Id == id);            
+            return View(customer);
         }
 
         // GET: Customers/Create
@@ -47,7 +47,7 @@ namespace Trashcollector.Controllers
                 customer.ApplicationId = User.Identity.GetUserId();
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Customer");
+                return RedirectToAction("Index", "Customers");
             }
             catch
             {
@@ -58,7 +58,8 @@ namespace Trashcollector.Controllers
         // GET: Customers/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            return View(customer);
         }
 
         // POST: Customers/Edit/5
@@ -68,7 +69,12 @@ namespace Trashcollector.Controllers
             try
             {
                 // TODO: Add update logic here
-
+                var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+                db.Customers.Remove(customeredit);
+                db.SaveChanges();
+                customeredit = customer;
+                db.Customers.Add(customer);
+                
                 return RedirectToAction("Index");
             }
             catch
@@ -80,7 +86,7 @@ namespace Trashcollector.Controllers
         // GET: Customers/Delete/5
         public ActionResult Delete(int id)
         {
-            var customer = db.Customers.SingleOrDefault(c => c.Id == id);
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
             return View(customer);
         }
 

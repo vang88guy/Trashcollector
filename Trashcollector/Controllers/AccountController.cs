@@ -168,11 +168,11 @@ namespace Trashcollector.Controllers
                     //Assign Role to user Here       
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
                     //Ends Here
-                    if (model.UserRoles == "Customers")
+                    if (model.UserRoles == "Customer")
                     {
                         return RedirectToAction("Create", "Customers");
                     }
-                    else 
+                    else if(model.UserRoles == "Empolyee")
                     { 
                         return RedirectToAction("Create", "Employees");
                     }
