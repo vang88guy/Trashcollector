@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
 using Trashcollector.Models;
 
@@ -12,121 +11,102 @@ namespace Trashcollector.Controllers
 {
     public class EmployeesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
+        
+       
+        ApplicationDbContext db;
+        public EmployeesController()
+        {
+            db = new ApplicationDbContext();
+        }
         // GET: Employees
         public ActionResult Index()
         {
-            var customers = db.Customers.Include(e => e.ApplicationUser);
-            return View(customers.ToList());
+            return View();
         }
-
-        // GET: Employees/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult TodaysPickUp()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employee);
+            string datenow = System.DateTime.Now.ToString("MM/dd/yyyy");
+            string day = System.DateTime.Today.DayOfWeek.ToString();
+            var id = User.Identity.GetUserId();
+            var usernow = db.Employees.Include(e => e.ApplicationUser).FirstOrDefault(e => e.ApplicationId == id);
+            int zipcode = usernow.ZipCode;
+            var customers = db.Customers.Include(e => e.ApplicationUser).Where(e => e.PickUpDay == day || e.ExtraPickUpDate == datenow && e.ZipCode == zipcode).ToList();
+            return View(customers);
+        }
+        // GET: Employees/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
         }
 
         // GET: Employees/Create
         public ActionResult Create()
         {
-           // ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email");
-            return View();
+            Employee employee = new Employee();
+            return View(employee);
         }
 
         // POST: Employees/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ApplicationId,FirstName,LastName,ZipCode")] Employee employee)
+        public ActionResult Create(Employee employee)
         {
-            if (ModelState.IsValid)
+            try
             {
+                // TODO: Add insert logic here
+                employee.ApplicationId = User.Identity.GetUserId();
                 db.Employees.Add(employee);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("TodaysPickUp");
+                
             }
-
-           // ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", employee.ApplicationId);
-            return View(employee);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Employees/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-           // ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", employee.ApplicationId);
-            return View(employee);
+            return View();
         }
 
         // POST: Employees/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ApplicationId,FirstName,LastName,ZipCode")] Employee employee)
+        public ActionResult Edit(int id, FormCollection collection)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
+                // TODO: Add update logic here
+
                 return RedirectToAction("Index");
             }
-           // ViewBag.ApplicationId = new SelectList(db.ApplicationUsers, "Id", "Email", employee.ApplicationId);
-            return View(employee);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Employees/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employee);
+            return View();
         }
 
         // POST: Employees/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
         {
-            Employee employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                // TODO: Add delete logic here
+
+                return RedirectToAction("Index");
             }
-            base.Dispose(disposing);
+            catch
+            {
+                return View();
+            }
         }
     }
 }

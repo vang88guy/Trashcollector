@@ -24,9 +24,10 @@ namespace Trashcollector.Controllers
         }
 
         // GET: Customers/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
-            var customer = db.Customers.Include(c=>c.ApplicationUser).SingleOrDefault(c => c.Id == id);            
+            var id = User.Identity.GetUserId();
+            var customer = db.Customers.Include(c=>c.ApplicationUser).SingleOrDefault(c => c.ApplicationId == id);            
             return View(customer);
         }
 
@@ -47,7 +48,7 @@ namespace Trashcollector.Controllers
                 customer.ApplicationId = User.Identity.GetUserId();
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Customers");
+                return RedirectToAction("Details" , "Customers");
             }
             catch
             {
@@ -70,12 +71,58 @@ namespace Trashcollector.Controllers
             {
                 // TODO: Add update logic here
                 var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
-                db.Customers.Remove(customeredit);
+
+                //firsrname
+                //lastname
+                //address
+                //City
+                //State
+                //Zipcode
+
+                customeredit.FirstName = customer.FirstName;
+                customeredit.LastName = customer.LastName;
+                customeredit.StreetAddress = customer.StreetAddress;
+                customeredit.City = customer.City;
+                customeredit.State = customer.State;
+                customeredit.ZipCode = customer.ZipCode;
+
+
                 db.SaveChanges();
-                customeredit = customer;
-                db.Customers.Add(customer);
+                return RedirectToAction("Details");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Customers/Edit/5
+        public ActionResult EditPickUp(int id)
+        {
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            return View(customer);
+        }
+
+        // POST: Customers/Edit/5
+        [HttpPost]
+        public ActionResult EditPickUp(int id, Customer customer)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
                 
-                return RedirectToAction("Index");
+                customeredit.PickUpDay = customer.PickUpDay;
+                customeredit.ExtraPickUpDate = customer.ExtraPickUpDate;
+                customeredit.SuspendStart = customer.SuspendStart;
+                customeredit.SuspendEnd = customer.SuspendEnd;
+                customeredit.PickupConfirmation = customer.PickupConfirmation;
+                customeredit.Balance = customer.Balance;
+                
+
+                db.SaveChanges();
+
+                return RedirectToAction("Details", "Customers");
             }
             catch
             {
