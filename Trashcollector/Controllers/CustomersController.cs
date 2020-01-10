@@ -71,6 +71,8 @@ namespace Trashcollector.Controllers
             {
                 // TODO: Add update logic here
                 var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+                customeredit.ApplicationUser.UserName = customer.ApplicationUser.UserName;
+                customeredit.ApplicationUser.Email = customer.ApplicationUser.Email;
                 customeredit.FirstName = customer.FirstName;
                 customeredit.LastName = customer.LastName;
                 customeredit.StreetAddress = customer.StreetAddress;

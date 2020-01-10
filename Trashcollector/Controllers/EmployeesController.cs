@@ -6,6 +6,8 @@ using System.Web;
 using System.Data.Entity;
 using System.Web.Mvc;
 using Trashcollector.Models;
+using System.Threading.Tasks;
+using static Trashcollector.Models.PickByDayViewModels;
 
 namespace Trashcollector.Controllers
 {
@@ -34,6 +36,45 @@ namespace Trashcollector.Controllers
 
             var customers = db.Customers.Include(e => e.ApplicationUser).Where(e => e.PickUpDay == day || e.ExtraPickUpDate == datenow && e.ZipCode == zipcode).ToList();
             return View(customers);
+        }
+
+        public ActionResult PickByDay()
+        {
+            List<string> WeekDays = new List<string> { "Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            var id = User.Identity.GetUserId();
+            var usernow = db.Employees.Include(e => e.ApplicationUser).FirstOrDefault(e => e.ApplicationId == id);
+            int zipcode = usernow.ZipCode;
+            ViewBag.Name = new SelectList(WeekDays);
+            PickByDayViewModels models = new PickByDayViewModels();
+            var customers = db.Customers.Include(c => c.ApplicationUser).Where(c=>c.ZipCode == zipcode).ToList();
+            models.customers = customers;
+            return View(models);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PickByDay(PickByDayViewModels model)
+        {
+            PickByDayViewModels models = new PickByDayViewModels();
+            string datenow = System.DateTime.Now.ToString("MM/dd/yyyy");
+            var id = User.Identity.GetUserId();
+            var usernow = db.Employees.Include(e => e.ApplicationUser).FirstOrDefault(e => e.ApplicationId == id);
+            int zipcode = usernow.ZipCode;
+            var customers = db.Customers.Include(e => e.ApplicationUser).Where(e => e.PickUpDay == model.Day || e.ExtraPickUpDate == datenow && e.ZipCode == zipcode).ToList();
+            models.customers = customers;
+            List<string> WeekDays = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            ViewBag.Name = new SelectList(WeekDays);
+            //foreach (var item in model.customers)
+            //{
+            //    //if ()
+            //    //{
+
+            //    //}
+            //}
+            //foreach (var item in model.customers)
+            //{
+                
+            //}
+            return View(models);
         }
         // GET: Employees/Details/5
         public ActionResult Details(int id)
@@ -74,17 +115,25 @@ namespace Trashcollector.Controllers
         // GET: Employees/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var employee = db.Employees.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            return View(employee);
         }
 
         // POST: Employees/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Employee employee)
         {
             try
             {
                 // TODO: Add update logic here
-
+                var employeeedit = db.Employees.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+                employeeedit.ApplicationUser.UserName = employee.ApplicationUser.UserName;
+                employeeedit.ApplicationUser.Email = employee.ApplicationUser.Email;
+                employeeedit.FirstName = employee.FirstName;
+                employeeedit.LastName = employee.LastName;
+                employeeedit.ZipCode = employee.ZipCode;
+                
+                db.SaveChanges();
                 return RedirectToAction("TodaysPickUp");
             }
             catch

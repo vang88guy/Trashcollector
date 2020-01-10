@@ -1,0 +1,126 @@
+﻿@model Trashcollector.Models.PickByDayViewModels
+
+
+@{
+    ViewBag.Title = "PickByDay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PickByDay</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].StreetAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].ZipCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].PickUpDay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].ExtraPickUpDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].SuspendStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].SuspendEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].PickupConfirmation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customers[0].Balance)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.customers)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExtraPickUpDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspendStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuspendEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickupConfirmation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model=>model.Day, "Day", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            
+            @Html.DropDownList("Day", (SelectList)ViewBag.Name)
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Submit" />
+        </div>
+    </div>
+}
+
+
