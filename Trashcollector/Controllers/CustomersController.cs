@@ -71,22 +71,12 @@ namespace Trashcollector.Controllers
             {
                 // TODO: Add update logic here
                 var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
-
-                //firsrname
-                //lastname
-                //address
-                //City
-                //State
-                //Zipcode
-
                 customeredit.FirstName = customer.FirstName;
                 customeredit.LastName = customer.LastName;
                 customeredit.StreetAddress = customer.StreetAddress;
                 customeredit.City = customer.City;
                 customeredit.State = customer.State;
                 customeredit.ZipCode = customer.ZipCode;
-
-
                 db.SaveChanges();
                 return RedirectToAction("Details");
             }
@@ -117,9 +107,7 @@ namespace Trashcollector.Controllers
                 customeredit.SuspendStart = customer.SuspendStart;
                 customeredit.SuspendEnd = customer.SuspendEnd;
                 customeredit.PickupConfirmation = customer.PickupConfirmation;
-                customeredit.Balance = customer.Balance;
-                
-
+                customeredit.Balance = customer.Balance;               
                 db.SaveChanges();
 
                 return RedirectToAction("Details", "Customers");

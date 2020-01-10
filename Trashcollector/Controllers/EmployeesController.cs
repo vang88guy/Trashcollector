@@ -21,7 +21,8 @@ namespace Trashcollector.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            return View();
+            var employees = db.Employees;
+            return View(employees);
         }
         public ActionResult TodaysPickUp()
         {
@@ -30,12 +31,17 @@ namespace Trashcollector.Controllers
             var id = User.Identity.GetUserId();
             var usernow = db.Employees.Include(e => e.ApplicationUser).FirstOrDefault(e => e.ApplicationId == id);
             int zipcode = usernow.ZipCode;
+
             var customers = db.Customers.Include(e => e.ApplicationUser).Where(e => e.PickUpDay == day || e.ExtraPickUpDate == datenow && e.ZipCode == zipcode).ToList();
             return View(customers);
         }
         // GET: Employees/Details/5
         public ActionResult Details(int id)
         {
+            var userid = User.Identity.GetUserId();
+            var employee = db.Employees.Include(c => c.ApplicationUser).SingleOrDefault(c => c.ApplicationId == userid);
+            bool role = User.IsInRole("Employee");
+    
             return View();
         }
 
@@ -79,7 +85,7 @@ namespace Trashcollector.Controllers
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction("Index");
+                return RedirectToAction("TodaysPickUp");
             }
             catch
             {
@@ -90,17 +96,23 @@ namespace Trashcollector.Controllers
         // GET: Employees/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var employee = db.Employees.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            return View(employee);
         }
 
         // POST: Employees/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Employee employee)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                employee = db.Employees.SingleOrDefault(c => c.Id == id);
+                var userdelete = db.Users.SingleOrDefault(c => c.Id == employee.ApplicationId);
+                employee.ApplicationId = null;
+                db.Employees.Remove(employee);
+                db.Users.Remove(userdelete);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch
