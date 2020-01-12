@@ -22,8 +22,8 @@
             @Html.LabelFor(model => model.PickUpDay, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PickUpDay, new { htmlAttributes = new { @class = "form-control" } })
-                @*@Html.TextBoxFor(model => model.PickUpDay, new { @type = "date", @class = "form-control datepicker", @Value = Model.PickUpDay.ToString() })*@
-                @Html.ValidationMessageFor(model => model.PickUpDay, "mm/dd/yyyy", new { @class = "text-danger" })
+               
+                @Html.ValidationMessageFor(model => model.PickUpDay, "Day of the Week", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -79,5 +79,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Details", "Details")
 </div>

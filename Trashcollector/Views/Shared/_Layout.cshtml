@@ -17,11 +17,31 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Trash Collector", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (User.IsInRole("Employee") == true)
+                    {
+                        <li>@Html.ActionLink("Today's Pick Up", "TodaysPickUp", "Employees")</li>
+                        <li>@Html.ActionLink("Sort By Day", "PickByDay", "Employees")</li>
+                    }
+                    else if (User.IsInRole("Customer") == true)
+                    {
+                        <li>@Html.ActionLink("Details", "Details", "Customers")</li>
+                        <li>@Html.ActionLink("Pick Up Dates", "EditPickUp", "Customers")</li>
+                    }
+                    else if (User.IsInRole("Admin") == true)
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Customers", "Index", "Customers")</li>
+                        <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    }
+
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>

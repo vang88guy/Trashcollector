@@ -89,21 +89,23 @@ namespace Trashcollector.Controllers
         }
 
         // GET: Customers/Edit/5
-        public ActionResult EditPickUp(int id)
+        public ActionResult EditPickUp()
         {
-            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            var id = User.Identity.GetUserId();
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.ApplicationId == id);
             return View(customer);
         }
 
         // POST: Customers/Edit/5
         [HttpPost]
-        public ActionResult EditPickUp(int id, Customer customer)
+        public ActionResult EditPickUp(Customer customer)
         {
             try
             {
                 // TODO: Add update logic here
-                var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
-                
+                var id = User.Identity.GetUserId();
+                var customeredit = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.ApplicationId == id);
+
                 customeredit.PickUpDay = customer.PickUpDay;
                 customeredit.ExtraPickUpDate = customer.ExtraPickUpDate;
                 customeredit.SuspendStart = customer.SuspendStart;

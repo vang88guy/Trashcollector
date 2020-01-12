@@ -262,6 +262,7 @@
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Delete.cshtml" />
     <Content Include="Views\Employees\PickByDay.cshtml" />
+    <Content Include="Views\Employees\PickUpConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -54,65 +54,73 @@
         <th>
             @Html.DisplayNameFor(model => model.Balance)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.ApplicationId)
-        </th>*@
+        @if (User.IsInRole("Admin") == true)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationId)
+            </th>
+        }
+
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.StreetAddress)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.City)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.State)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ZipCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PickUpDay)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ExtraPickUpDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SuspendStart)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SuspendEnd)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PickupConfirmation)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Balance)
+    </td>
+    @if (User.IsInRole("Admin") == true)
+    {
         <td>
-            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StreetAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.State)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ZipCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PickUpDay)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExtraPickUpDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SuspendStart)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SuspendEnd)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PickupConfirmation)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.ApplicationId)
-        </td>*@
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+                @Html.DisplayFor(modelItem => item.ApplicationId)
+            </td>
+    }
+   
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
 }
 
 </table>

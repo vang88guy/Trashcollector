@@ -41,10 +41,11 @@ namespace Trashcollector.Controllers
         public ActionResult PickByDay()
         {
             List<string> WeekDays = new List<string> { "Sunday","Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+            ViewBag.Name = new SelectList(WeekDays);
             var id = User.Identity.GetUserId();
             var usernow = db.Employees.Include(e => e.ApplicationUser).FirstOrDefault(e => e.ApplicationId == id);
             int zipcode = usernow.ZipCode;
-            ViewBag.Name = new SelectList(WeekDays);
+            
             PickByDayViewModels models = new PickByDayViewModels();
             var customers = db.Customers.Include(c => c.ApplicationUser).Where(c=>c.ZipCode == zipcode).ToList();
             models.customers = customers;
@@ -63,17 +64,7 @@ namespace Trashcollector.Controllers
             models.customers = customers;
             List<string> WeekDays = new List<string> { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             ViewBag.Name = new SelectList(WeekDays);
-            //foreach (var item in model.customers)
-            //{
-            //    //if ()
-            //    //{
-
-            //    //}
-            //}
-            //foreach (var item in model.customers)
-            //{
-                
-            //}
+         
             return View(models);
         }
         // GET: Employees/Details/5
@@ -163,6 +154,34 @@ namespace Trashcollector.Controllers
                 db.Users.Remove(userdelete);
                 db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        // GET: Employees/Edit/5
+        public ActionResult PickUpConfirmation(int id)
+        {
+            var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+            return View(customer);
+        }
+
+        // POST: Employees/Edit/5
+        [HttpPost]
+        public ActionResult PickUpConfirmation(int id, Customer customer)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                var customerpickup = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+                customerpickup.PickupConfirmation = customer.PickupConfirmation;
+                if (customer.PickupConfirmation == true)
+                {
+                    customerpickup.Balance += 10.50;
+                }
+                db.SaveChanges();
+                return RedirectToAction("TodaysPickUp");
             }
             catch
             {
