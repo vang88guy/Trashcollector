@@ -185,8 +185,10 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\GoogleMapAPIKey.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MapViewModel.cs" />
     <Compile Include="Models\PickByDayViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -263,9 +265,12 @@
     <Content Include="Views\Employees\Delete.cshtml" />
     <Content Include="Views\Employees\PickByDay.cshtml" />
     <Content Include="Views\Employees\PickUpConfirmation.cshtml" />
+    <Content Include="Views\Customers\AddressMap.cshtml" />
+    <Content Include="Views\Employees\AddressMap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\GoogleMapAPIKey\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

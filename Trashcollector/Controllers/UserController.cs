@@ -22,7 +22,7 @@ namespace Trashcollector.Controllers
 
                 ViewBag.displayMenu = "No";
 
-                if (isAdminUser())
+                if (IsAdminUser())
                 {
                     ViewBag.displayMenu = "Yes";
                 }
@@ -35,7 +35,7 @@ namespace Trashcollector.Controllers
             return View();
         }
         public ApplicationDbContext context;
-        public Boolean isAdminUser()
+        public Boolean IsAdminUser()
         {
             if (User.Identity.IsAuthenticated)
             {

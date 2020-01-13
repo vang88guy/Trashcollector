@@ -6,6 +6,8 @@ using System.Web;
 using System.Data.Entity;
 using System.Web.Mvc;
 using Trashcollector.Models;
+using System.Net;
+using System.Xml.Linq;
 
 namespace Trashcollector.Controllers
 {
@@ -136,7 +138,7 @@ namespace Trashcollector.Controllers
             try
             {
                 // TODO: Add delete logic here
-                customer = db.Customers.SingleOrDefault(c => c.Id == id);
+                customer = db.Customers.Include(c=>c.ApplicationUser).SingleOrDefault(c => c.Id == id);
                 var userdelete = db.Users.SingleOrDefault(c => c.Id == customer.ApplicationId);
                 customer.ApplicationId = null;
                 db.Customers.Remove(customer);
@@ -147,6 +149,42 @@ namespace Trashcollector.Controllers
             catch
             {
                 return View();
+            }
+        }
+        public ActionResult AddressMap(int id) 
+        {
+            try
+            {
+                MapViewModel model = new MapViewModel();
+                var customer = db.Customers.Include(c => c.ApplicationUser).SingleOrDefault(c => c.Id == id);
+                model.customer = customer;
+                model.Key = GoogleMapAPIKey.MapKey;
+                model.Address = customer.StreetAddress + " " + customer.City + " " + customer.State;
+                string key;
+                string address;
+
+                key = GoogleMapAPIKey.MapKey;
+                address = customer.StreetAddress + " " + customer.City + " " + customer.State;
+                string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), key);
+
+                WebRequest request = WebRequest.Create(requestUri);
+                WebResponse response = request.GetResponse();
+                XDocument xdoc = XDocument.Load(response.GetResponseStream());
+
+                XElement result = xdoc.Element("GeocodeResponse").Element("result");
+                XElement locationElement = result.Element("geometry").Element("location");
+                XElement lat = locationElement.Element("lat");
+                XElement lng = locationElement.Element("lng");
+                var latx = lat.Value;
+                var lngx = lng.Value;
+                string map = string.Format("https://maps.googleapis.com/maps/api//staticmap?center={0}&zoom13&size=600x400&maptype=roadmap&markers=color:black%7c{2},{3}&key={1}", Uri.EscapeDataString(address), key, latx, lngx);
+                ViewBag.map = map;
+                return View(model);
+            }
+            catch 
+            {
+
+                return RedirectToAction("Index");
             }
         }
     }

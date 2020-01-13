@@ -15,7 +15,7 @@ namespace Trashcollector.Controllers
             {
 
 
-                if (!isAdminUser())
+                if (!IsAdminUser())
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -29,7 +29,7 @@ namespace Trashcollector.Controllers
             return View(Roles);
         }
 
-        private bool isAdminUser()
+        private bool IsAdminUser()
         {
             throw new NotImplementedException();
         }

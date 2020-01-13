@@ -9,7 +9,7 @@
 <h2>PickByDay</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create","Customers")
 </p>
 <table class="table">
     <tr>
@@ -96,7 +96,8 @@
             <td>
                
                 @Html.ActionLink("PickUpConfirmation", "PickUpConfirmation", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("AddressOnMap","AddressMap", new { id= item.Id}) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) 
             </td>
         </tr>
     }
